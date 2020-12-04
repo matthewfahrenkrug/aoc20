@@ -1,6 +1,6 @@
-use std::fs;
-use std::fmt;
 use regex::Regex;
+use std::fmt;
+use std::fs;
 
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
@@ -16,7 +16,9 @@ struct Password {
 
 impl Password {
     fn new(line: &str) -> Password {
-        let re = Regex::new(r"(?P<min>[0-9]{1,2})-(?P<max>[0-9]{1,2})\s(?P<ch>[a-z]):\s(?P<pw>[a-z]*)").unwrap();
+        let re =
+            Regex::new(r"(?P<min>[0-9]{1,2})-(?P<max>[0-9]{1,2})\s(?P<ch>[a-z]):\s(?P<pw>[a-z]*)")
+                .unwrap();
         let caps = re.captures(line).unwrap();
         let mut p = Password {
             min: caps.name("min").unwrap().as_str().parse::<usize>().unwrap(),
@@ -48,7 +50,7 @@ impl Password {
         let p1 = p1 == self.ch;
         let p2 = p2 == self.ch;
 
-        self.valid_p2 = Some(p1^p2);
+        self.valid_p2 = Some(p1 ^ p2);
         //println!("{}: {} {} - {}", p1^p2, p1, p2, self);
     }
 }
@@ -62,24 +64,19 @@ impl fmt::Display for Password {
 fn main() -> Result<()> {
     let input = fs::read_to_string("./input/input.txt")?;
     let input = parse(&input);
-    let count_p1 = input.iter().fold(0, |acc,x| {
-        match x.valid_p1 {
-            Some(true) => acc+1,
-            _ => acc,
-        }});
-    let count_p2 = input.iter().fold(0, |acc,x| {
-        match x.valid_p2 {
-            Some(true) => acc+1,
-            _ => acc,
-        }});
+    let count_p1 = input.iter().fold(0, |acc, x| match x.valid_p1 {
+        Some(true) => acc + 1,
+        _ => acc,
+    });
+    let count_p2 = input.iter().fold(0, |acc, x| match x.valid_p2 {
+        Some(true) => acc + 1,
+        _ => acc,
+    });
     println!("part1: {}, part2: {}", count_p1, count_p2);
     Ok(())
 }
 
-
 //Take string input and output vector of strings
 fn parse(input: &str) -> Vec<Password> {
-    input.lines()
-        .map(|l| Password::new(l))
-        .collect()
+    input.lines().map(|l| Password::new(l)).collect()
 }

@@ -19,7 +19,8 @@ fn main() -> Result<()> {
 
 //Take string input and output vector of numbers
 fn parse(input: &str) -> Vec<i32> {
-    input.lines()
+    input
+        .lines()
         .filter_map(|l| l.parse::<i32>().ok())
         .collect()
 }
@@ -27,7 +28,7 @@ fn parse(input: &str) -> Vec<i32> {
 fn part_one(input: &[i32]) -> Option<i32> {
     for &i in input.iter() {
         for &j in input.iter() {
-            match two_sum(i,j) {
+            match two_sum(i, j) {
                 Some(x) => return Some(x),
                 None => continue,
             }
@@ -41,7 +42,7 @@ fn part_two(input: &[i32]) -> Option<i32> {
     for &i in input.iter() {
         for &j in input.iter() {
             for &k in input.iter() {
-                match three_sum(i,j,k) {
+                match three_sum(i, j, k) {
                     Some(x) => return Some(x),
                     None => continue,
                 }
@@ -52,23 +53,22 @@ fn part_two(input: &[i32]) -> Option<i32> {
     None
 }
 
-fn two_sum(x: i32, y:i32) -> Option<i32> {
+fn two_sum(x: i32, y: i32) -> Option<i32> {
     let sum = x + y;
     if sum == 2020 {
         //println!("{} = {} * {}", x*y, x, y);
-        Some(x*y)
+        Some(x * y)
     } else {
         None
     }
 }
 
-fn three_sum(x: i32, y:i32, z:i32) -> Option<i32> {
+fn three_sum(x: i32, y: i32, z: i32) -> Option<i32> {
     let sum = x + y + z;
     if sum == 2020 {
         //println!("{} = {} * {} * {}", x*y*z, x, y, z);
-        Some(x*y*z)
+        Some(x * y * z)
     } else {
         None
     }
 }
-
